@@ -647,7 +647,7 @@ namespace Smpp.Requests
                 sb.Append(data_coding.ToString("X2")); // data_coding
                 sb.Append("00"); // sm_default_msg_id
 
-                if (data_coding == 0 || data_coding == 1)
+                if (data_coding == 0 || data_coding == 1 || data_coding == 8)
                 {
                     if (!is_multipart)
                     {
@@ -713,7 +713,9 @@ namespace Smpp.Requests
                         }
                     }
                 }
-                if (data_coding == 8)
+
+                // Sadeep: Our Kannel doesn't understand this format.
+                /*if (data_coding == 8)
                 {
                     var be = new StringBuilder();
                     foreach (char c in part_message)
@@ -750,7 +752,7 @@ namespace Smpp.Requests
                             part.ToString("D2") +
                             be);
                     }
-                }
+                }*/
 
                 if (data_coding == 245)
                 {

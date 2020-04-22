@@ -578,13 +578,16 @@ namespace Smpp
                     var submit_sm_s = new SubmitSm(pdu);
                     var submit_sm_resp_s = new SubmitSmResp();
 
-                    submit_sm_resp_s.MessageID = Guid.NewGuid().ToString("n");
+                    var messageId = Guid.NewGuid().ToString("n");
+                    submit_sm_resp_s.MessageID = messageId;
+
                     submit_sm_resp_s.sequence_number = submit_sm_s.sequence_number;
                     response = submit_sm_resp_s.Encode();
 
                     Events.LogChannelEvent(channel_name, "Message received from " + submit_sm_s.Sender + " to " + submit_sm_s.Recipient);
                     Events.LogChannelEvent(channel_name, "Sending [submit_sm_resp]");
                     SendPDU(response);
+                    Events.OnSubmitSmReceived(new SubmitSmEventArgs(messageId, submit_sm_s));
 
                     if (submit_sm_s.isMultipart)
                     {
@@ -1014,7 +1017,12 @@ namespace Smpp
         /// </summary>
         /// <param name="messageId"></param>
         /// <param name="status"></param>
-        public void SubmitDeliveryReport(string messageId, Common.MessageStatus status)
+        public void SubmitDeliveryReport(
+            string messageId,
+            string recipient,
+            string sender,
+            string bodyFormat,
+            Common.MessageStatus status)
         {
             string pdu;
             string messageStatus;
@@ -1057,9 +1065,9 @@ namespace Smpp
 
             var deliver_sm = new DeliverSm(Events);
             deliver_sm.sequence_number = sequence_number;
-            deliver_sm.Recipient = "";
-            deliver_sm.Sender = "";
-            deliver_sm.BodyFormat = "ascii";
+            deliver_sm.Recipient = recipient;
+            deliver_sm.Sender = sender;
+            deliver_sm.BodyFormat = bodyFormat;
             deliver_sm.ESMClass = 4;
             deliver_sm.IsDeliveryReport = true;
             var short_message = new StringBuilder();
@@ -1166,7 +1174,7 @@ namespace Smpp
         /// 1 - No active connection, 
         /// 2 - Too many messages per second
         /// 3 - Duplicate sequence number </returns>
-        public virtual int SubmitSm(int message_id, string sender, string recipient, string body, string body_format = "ascii", bool delivery_report = true)
+        public virtual int SubmitSm(int message_id, string sender, string recipient, string body, string body_format, bool delivery_report = true)
         {
             if (!connected)
             {

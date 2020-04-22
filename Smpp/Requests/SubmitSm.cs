@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace Smpp.Requests
@@ -83,18 +84,7 @@ namespace Smpp.Requests
 
             get
             {
-                switch (data_coding)
-                {
-                    case 0:
-                    case 1:
-                        return "ascii";
-                    case 8:
-                        return "unicode";
-                    case 245:
-                        return "wap_push";
-                    default:
-                        return "ascii";
-                }
+                return Common.body_format.Single(s => s.Value == data_coding).Key;
             }
         }
 
@@ -609,11 +599,11 @@ namespace Smpp.Requests
                         if (body_hex.StartsWith("050003"))
                         {
                             multipart_header = body_hex.Substring(0, 12);
-                            short_message = Common.HexToString(tail.Substring(12, sm_length * 2 - 12));
+                            short_message = Common.HexToGsm7(tail.Substring(12, sm_length * 2 - 12));
                         }
                         else
                         {
-                            short_message = Common.HexToString(tail.Substring(0, sm_length * 2));
+                            short_message = Common.HexToGsm7(tail.Substring(0, sm_length * 2));
                         }
                         break;
                     default:

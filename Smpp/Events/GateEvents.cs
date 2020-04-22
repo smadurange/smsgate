@@ -1,4 +1,6 @@
-﻿namespace Smpp.Events
+﻿using System;
+
+namespace Smpp.Events
 {
     public class GateEvents
     {
@@ -16,6 +18,8 @@
 
         public delegate void LogNewMessageEventHandler(string channelName, string messageId, string sender, string recipient, string body, string bodyFormat, int registeredDelivery);
         public event LogNewMessageEventHandler NewMessageEvent;
+
+        public event EventHandler<SubmitSmEventArgs> SubmitSmReceived;
 
         /// <summary>
         /// Event which indicates Informational or Error event
@@ -77,6 +81,11 @@
         {
             LogNewMessageEventHandler handler = NewMessageEvent;
             if (handler != null) handler(channelName, messageId, sender, recipient, body, bodyFormat, registeredDelivery);
+        }
+
+        public void OnSubmitSmReceived(SubmitSmEventArgs e)
+        {
+            SubmitSmReceived?.Invoke(this, e);
         }
     }
 }
