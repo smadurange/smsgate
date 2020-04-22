@@ -8,3 +8,6 @@
 /Smpp.Tests/bin
 /.vs
 /packages
+Smpp/Properties/PublishProfiles/
+
+*.user
