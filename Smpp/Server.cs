@@ -42,7 +42,7 @@ namespace Smpp
         /// 1 - No active connection, 
         /// 2 - Too many messages per second
         /// 3 - Duplicate sequence number </returns>
-        public override int SubmitSm(int message_id, string sender, string recipient, string body, string body_format = "ascii", bool delivery_report = true)
+        public override int SubmitSm(int message_id, string sender, string recipient, string body, string body_format, bool delivery_report = true)
         {
             if (!use_deliver_sm)
             {

@@ -1,6 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Description>Smsc implementation by https://github.com/kirakosyan/smsgate</Description>
+    <PackageProjectUrl>https://bitbucket.org/wavecell/smsgate/src</PackageProjectUrl>
+    <RepositoryUrl>https://bitbucket.org/wavecell/smsgate/src</RepositoryUrl>
+    <PackageTags />
+    <PackageId>SmsGate</PackageId>
+    <Product>SmsGate</Product>
+    <Authors>Armen Kirakosyan</Authors>
+    <Company>Armen Kirakosyan</Company>
+    <Version>1.0.5</Version>
+    <PackageReleaseNotes>Fix DLR for UCS2 encoding.</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

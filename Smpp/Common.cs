@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Smpp
@@ -465,11 +466,19 @@ namespace Smpp
         {
             body_format = new SortedList<string, int>();
 
-            body_format.Add("ascii", 0);
-            body_format.Add("binary", 2);
-            body_format.Add("latin", 3);
-            body_format.Add("unicode", 8);
-            body_format.Add("wap_push", 245);
+            body_format.Add("GSM7", 0);
+            body_format.Add("IA5", 1);
+            body_format.Add("OCTET2", 2);
+            body_format.Add("LATIN", 3);
+            body_format.Add("OCTET8", 4);
+            body_format.Add("JIS", 5);
+            body_format.Add("CYRLLIC", 6);
+            body_format.Add("LATINHEBREW", 7);
+            body_format.Add("UCS2", 8);
+            body_format.Add("PICTOGRAM_ENCODING", 9);
+            body_format.Add("ISO2022_JP", 10);
+            body_format.Add("EXTENDEDKANJIJIS", 13);
+            body_format.Add("KS_C_5601", 14);
         }
 
         #region constants
@@ -1007,6 +1016,36 @@ namespace Smpp
             _8bit.Append(bin.ToString().Substring(bin.Length / 8 * 8, bin.Length - bin.Length / 8 * 8) + head);
 
             return Convert7bitBinaryToString(_8bit.ToString());
+        }
+
+        public static string HexToGsm7(string hexString)
+        {
+            const string charset = "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞ\x1bÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?" +
+                                   "¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà";
+
+            const string extensionSet =
+                "````````````````````^```````````````````{}`````\\````````````[~]`" +
+                "|````````````````````````````````````€``````````````````````````";
+
+            var builder = new StringBuilder();
+            var inExtensionSet = false;
+
+            for (var i = 0; i < hexString.Length - 1; i += 2)
+            {
+                var index = int.Parse(hexString.Substring(i, 2), NumberStyles.HexNumber);
+
+                if (index == 27)
+                {
+                    inExtensionSet = true;
+                    continue;
+                }
+
+                var value = inExtensionSet ? extensionSet[index] : charset[index];
+                inExtensionSet = false;
+                builder.Append(Convert.ToChar(value));
+            }
+
+            return builder.ToString();
         }
     }
 }
