@@ -16,7 +16,7 @@ namespace Smpp.Events
         public delegate void LogMessageDeliverReportEventHandler(string responseMessageId, Common.MessageStatus status);
         public event LogMessageDeliverReportEventHandler MessageDeliveryReportEvent;
 
-        public delegate void LogNewMessageEventHandler(string channelName, string messageId, string sender, string recipient, string body, string bodyFormat, int registeredDelivery);
+        public delegate void LogNewMessageEventHandler(string channelName, string messageId, string sender, string recipient, string body, string bodyFormat, int registeredDelivery, string userMessageReference);
         public event LogNewMessageEventHandler NewMessageEvent;
 
         public event EventHandler<SubmitSmEventArgs> SubmitSmReceived;
@@ -77,10 +77,11 @@ namespace Smpp.Events
         /// <param name="body"></param>
         /// <param name="bodyFormat"></param>
         /// <param name="registeredDelivery"></param>
-        public void LogNewMessageEvent(string channelName, string messageId, string sender, string recipient, string body, string bodyFormat, int registeredDelivery)
+        public void LogNewMessageEvent(string channelName, string messageId, string sender, string recipient,
+            string body, string bodyFormat, int registeredDelivery, string userMessageReference = null)
         {
             LogNewMessageEventHandler handler = NewMessageEvent;
-            if (handler != null) handler(channelName, messageId, sender, recipient, body, bodyFormat, registeredDelivery);
+            if (handler != null) handler(channelName, messageId, sender, recipient, body, bodyFormat, registeredDelivery, userMessageReference);
         }
 
         public void OnSubmitSmReceived(SubmitSmEventArgs e)

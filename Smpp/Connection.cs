@@ -722,7 +722,7 @@ namespace Smpp
                     try
                     {
                         deliver_sm = new DeliverSm(pdu);
-                        deliver_sm.Is8bit = use8bit;
+                        deliver_sm.Is8bit = /*use8bit*/true;
                         deliver_sm.Decode();
                     }
                     catch (CommandLengthException)
@@ -847,7 +847,7 @@ namespace Smpp
 
                     // Log message
                     Events.LogChannelEvent(channel_name, "Message received from " + deliver_sm.Sender + " to " + deliver_sm.Recipient, debug ? pdu : "");
-                    Events.LogNewMessageEvent(channel_name, deliver_sm_resp.MessageID, deliver_sm.Sender, deliver_sm.Recipient, deliver_sm.Body, deliver_sm.BodyFormat, deliver_sm.RegisteredDelivery);
+                    Events.LogNewMessageEvent(channel_name, deliver_sm_resp.MessageID, deliver_sm.Sender, deliver_sm.Recipient, deliver_sm.Body, deliver_sm.BodyFormat, deliver_sm.RegisteredDelivery, deliver_sm.UserMessageReference);
 
                     break;
                 case "deliver_sm_resp":

@@ -287,6 +287,8 @@ namespace Smpp.Requests
             }
         }
 
+        public string UserMessageReference { get; set; }
+
         public override void Decode()
         {
             string tail = body;
@@ -322,6 +324,9 @@ namespace Smpp.Requests
             data_coding = bt[2];
             sm_default_msg_id = bt[3];
 
+            var userMessageRefTlvValue = tail.Substring(tail.Length - 72); // 72 length of the part of umid.
+            UserMessageReference = Common.HexToString(userMessageRefTlvValue);
+
             sm_length = bt[4];
             if (sm_length != 0)
             {
@@ -347,6 +352,9 @@ namespace Smpp.Requests
                         }
                         break;
                     case 3: // Latin 1 (ISO-8859-1)
+                        body_hex = tail.Substring(0, sm_length * 2);
+                        short_message = Common.HexToString(body_hex, Encoding.UTF7);
+                        break;
                     case 1: // ASCII
                     case 0:
                         body_hex = tail.Substring(0, sm_length * 2);
