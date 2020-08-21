@@ -722,7 +722,7 @@ namespace Smpp
                     try
                     {
                         deliver_sm = new DeliverSm(pdu);
-                        deliver_sm.Is8bit = use8bit;
+                        deliver_sm.Is8bit = /*use8bit*/true;
                         deliver_sm.Decode();
                     }
                     catch (CommandLengthException)
