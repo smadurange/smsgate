@@ -287,6 +287,8 @@ namespace Smpp.Requests
             }
         }
 
+        public string UserMessageReference { get; set; }
+
         public override void Decode()
         {
             string tail = body;
@@ -321,6 +323,9 @@ namespace Smpp.Requests
             replace_if_present_flag = bt[1];
             data_coding = bt[2];
             sm_default_msg_id = bt[3];
+
+            var userMessageRefTlvValue = tail.Substring(tail.Length - 72); // 72 length of the part of umid.
+            UserMessageReference = Common.HexToString(userMessageRefTlvValue);
 
             sm_length = bt[4];
             if (sm_length != 0)
