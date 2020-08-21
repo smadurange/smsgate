@@ -352,6 +352,9 @@ namespace Smpp.Requests
                         }
                         break;
                     case 3: // Latin 1 (ISO-8859-1)
+                        body_hex = tail.Substring(0, sm_length * 2);
+                        short_message = Common.HexToString(body_hex, Encoding.UTF7);
+                        break;
                     case 1: // ASCII
                     case 0:
                         body_hex = tail.Substring(0, sm_length * 2);
