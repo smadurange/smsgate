@@ -361,9 +361,7 @@ namespace Smpp.Requests
                         if (body_hex.StartsWith("050003"))
                         {
                             multipart_header = body_hex.Substring(0, 12);
-                            short_message = is_8bit
-                                ? Common.Convert8bitTo7bit(tail.Substring(12, sm_length * 2 - 12))
-                                : Common.HexToString(body_hex);
+                            short_message = Common.HexToString(body_hex.Substring(12, sm_length * 2 - 12));
                         }
                         else
                         {
