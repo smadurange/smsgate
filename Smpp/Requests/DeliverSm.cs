@@ -358,22 +358,14 @@ namespace Smpp.Requests
                     case 1: // ASCII
                     case 0:
                         body_hex = tail.Substring(0, sm_length * 2);
-                        if (is_8bit)
+                        if (body_hex.StartsWith("050003"))
                         {
-                            short_message = Common.Convert8bitTo7bit(body_hex);
+                            multipart_header = body_hex.Substring(0, 12);
+                            short_message = Common.HexToString(body_hex.Substring(12, sm_length * 2 - 12));
                         }
                         else
                         {
-                            if (body_hex.StartsWith("050003"))
-                            {
-                                multipart_header = body_hex.Substring(0, 12);
-                                short_message = Common.HexToString(tail.Substring(12, sm_length * 2 - 12));
-                            }
-                            else
-                            {
-                                short_message = Common.HexToString(body_hex);
-                                //short_message = Encoding.Unicode.GetString(Common.ConvertHexStringToByteArray(body_hex));
-                            }
+                            short_message = short_message = Common.HexToString(body_hex);
                         }
                         break;
                     default:
