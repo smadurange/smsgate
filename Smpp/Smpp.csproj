@@ -9,7 +9,7 @@
     <Product>SmsGate</Product>
     <Authors>Armen Kirakosyan, Sadeep Madurange</Authors>
     <Company></Company>
-    <Version>1.0.9</Version>
+    <Version>1.0.10</Version>
     <PackageReleaseNotes>Updated project metadata.</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
