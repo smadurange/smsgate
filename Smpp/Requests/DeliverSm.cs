@@ -367,9 +367,7 @@ namespace Smpp.Requests
                         }
                         else
                         {
-                            short_message = is_8bit
-                                ? short_message = Common.Convert8bitTo7bit(body_hex)
-                                : short_message = Common.HexToString(body_hex);
+                            short_message = short_message = Common.HexToString(body_hex);
                         }
                         break;
                     default:
